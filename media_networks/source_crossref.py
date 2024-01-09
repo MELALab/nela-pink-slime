@@ -3,9 +3,10 @@ Perform the cross-referencing of news sources from each network with the sources
 """
 import logging
 import re
+import json
+
 
 from pathlib import Path
-
 import pandas as pd
 
 
@@ -40,13 +41,19 @@ if __name__ == "__main__":
             logger.info(f"{s=} {network=}")
             sources_network[s] = network
     
+    # Read IP addr data
+    source_ips = dict()
+    with open("ipaddrs/source_IPs.jsonl") as fin:
+        for line in fin:
+            d = json.loads(line)
+            source_ips[d['source']] = d["ipaddrlist"][0]
+
 
     cross_data = list()
     for src, feed in ps_sources:
-        if src in sources_network:
-            cross_data.append((src, sources_network[src]))
-        else:
-            cross_data.append((src, 'UNKNOWN'))
+        src_network = sources_network[src] if src in sources_network else 'UNKNOWN'
+        src_ip = source_ips[src] if src in source_ips else 'UNKNOWN'
+        cross_data.append((src, src_network, src_ip))
     
-    df = pd.DataFrame(cross_data, columns=['source', 'network'])
+    df = pd.DataFrame(cross_data, columns=['source', 'network', 'ipaddr'])
     df.to_csv("source_network.csv", index=None)
