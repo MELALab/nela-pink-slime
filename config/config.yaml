@@ -1,0 +1,4 @@
+path:
+  data: "/Users/mgouveag/data/NELA-PS"
+  logging_conf: 'config/logging_conf.yaml'
+  output_dir: 'results/'

@@ -1,0 +1,35 @@
+version: 1
+formatters:
+  standard:
+    format: '%(asctime)s|%(name)s|%(levelname)s|%(message)s'
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: standard
+    stream: ext://sys.stdout
+  errors_file:
+    class: utils.fileHandlers.handlers.MakedirsRotatingFileHandler
+    level: ERROR
+    formatter: standard
+    filename: logs/errors.log
+    maxBytes: 10485760  # 10 MB
+    backupCount: 20
+    encoding: utf8
+  output_file:
+    class: utils.fileHandlers.handlers.MakedirsRotatingFileHandler
+    level: NOTSET
+    formatter: standard
+    filename: logs/output.log
+    maxBytes: 10485760  # 10 MB max file size
+    backupCount: 20  # Rotates this many times when maxBytes is reached
+    encoding: utf8
+loggers:
+  __main__:
+    level: DEBUG
+    handlers: [errors_file, output_file]
+    propagate: yes  # Do not propagate to `root` level.
+root:
+  level: DEBUG
+  handlers: [console]
