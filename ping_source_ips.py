@@ -40,7 +40,7 @@ if __name__ == "__main__":
             domain = get_url_domain(url)
             logger.info(f"Pinging: {domain=}")
             try:
-                time.sleep(0.5)  # Sleep before next ping to avoid exceedin rate limits
+                time.sleep(0.5)  # Sleep before next ping to avoid exceeding rate limits
                 hostname, aliaslist, ipaddrlist = socket.gethostbyname_ex(domain)
                 obj = {"source": src, "hostname": hostname, "aliaslist": aliaslist, "ipaddrlist": ipaddrlist}
                 logger.info(f"Response: {obj=}")
